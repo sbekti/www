@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    {# Allow child templates to set their own title #}
+    <title>{% block title %}Internal Tool{% endblock %} · Bektinet</title>
+    {# Link to the internal theme CSS #}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/internal_theme.css') }}">
+    {# Add any additional head elements here if needed by child templates #}
+    {% block head %}{% endblock %}
+</head>
+<body>
+    {# Navigation Bar #}
+    <nav class="navbar">
+        <a href="{{ url_for('internal_bp.landing_page') }}">Intern Home</a>
+        <a href="{{ url_for('internal_bp.devices_list') }}">Manage Devices</a>
+        {# Add more internal navigation links here #}
+        <a href="{{ url_for('public_index') }}" style="float: right;">Public Site</a>
+    </nav>
+
+    {# Main Content Area - no default container here #}
+    {% block content %}
+        {# Default content block - child templates will override this and add their own container #}
+    {% endblock %}
+
+    {# Footer #}
+    <footer class="footer">
+        <p>&copy; {{ now().year }} Bektinet</p>
+        {# You might add build date or other info here if desired #}
+    </footer>
+</body>
+</html> 

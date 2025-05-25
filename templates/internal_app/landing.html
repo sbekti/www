@@ -1,0 +1,36 @@
+{% extends "internal_app/base.html" %}
+
+{% block title %}Intern Home{% endblock %}
+
+{% block content %}
+    {# The container is now in the base template #}
+    <div class="container">
+        <h1>Intern Home</h1>
+
+        <div class="user-info content-block">
+            <h2>User Information</h2>
+            {% if remote_user %}
+                <p><strong>User ID:</strong> {{ remote_user }}</p>
+                <p><strong>Name:</strong> {{ remote_name if remote_name else 'N/A' }}</p>
+                <p><strong>Email:</strong> {{ remote_email if remote_email else 'N/A' }}</p>
+                <p><strong>Groups:</strong> {{ remote_groups if remote_groups else 'N/A' }}</p>
+                <p><strong>Sudoer Status:</strong> {{ 'Yes' if is_sudoer else 'No' }}</p>
+            {% else %}
+                <p>User information not available. Ensure headers are correctly passed by the proxy.</p>
+            {% endif %}
+        </div>
+
+        <div class="nav-tools content-block">
+            <h2>Available Tools</h2>
+            {% if nav_items %}
+                <ul>
+                    {% for item in nav_items %}
+                        <li><a href="{{ url_for(item.url) }}">{{ item.name }}</a></li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>No tools are currently available.</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

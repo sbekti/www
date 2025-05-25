@@ -1,0 +1,67 @@
+# Docker specific files - should not be part of the image context
+Dockerfile
+.dockerignore
+.git
+.gitignore
+README.md
+LICENSE
+
+# Python virtual environments
+env/
+venv/
+.venv/
+
+# Python cache and compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Build artifacts and distribution files
+build/
+dist/
+*.egg-info/
+
+# Test framework caches and reports
+.tox/
+.mypy_cache/
+.pytest_cache/
+htmlcov/
+.coverage
+.coverage.*
+
+# Notebook checkpoints
+.ipynb_checkpoints/
+
+# Logs
+logs/
+*.log
+
+# Local environment variables files
+.env
+.env.*
+# If you have an example env file you want to include, you can negate it:
+# !.env.example
+
+# IDE-specific configuration
+.vscode/
+
+# OS-generated files
+.DS_Store
+.localized
+._*
+
+# Temporary package files
+*.tgz
+*.whl
+
+# Local database files (if any, though you're using PostgreSQL)
+*.sqlite3
+*.db
+
+# Uploads directory (if it's for temporary/local uploads not part of the image)
+uploads/
+
+# Node modules (if any frontend build steps are done outside Docker or in a multi-stage build)
+node_modules/

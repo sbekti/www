@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>{% block title %}Samudra Bekti{% endblock %}</title>
+    <meta name="description" content="Personal website of Samudra Bekti.">
+    {% if canonical_url %}<link rel="canonical" href="{{ canonical_url }}">{% endif %}
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/public_theme.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>Samudra Bekti's Personal Site</h1>
+            <nav>
+                <a href="{{ url_for('public_index') }}">Home</a> ·
+                <a href="{{ url_for('resume_page') }}">Resume</a> ·
+                <a href="{{ url_for('blog_page') }}">Blog</a> ·
+                <a href="https://intern.corp.bekti.com">Intern</a>
+            </nav>
+            <hr>
+        </header>
+
+        {% block content %}{% endblock %}
+
+        <footer>
+            <table width="100%" border="0">
+                <tbody>
+                    <tr>
+                        <td>Copyright © {{ now().year }} Samudra Bekti</td>
+                    </tr>
+                    <tr>
+                        <td>I do not speak for my employer.</td>
+                        <td align="right">Last updated: <span class="last-updated">{{ last_updated if last_updated else 'N/A' }}</span></td>
+                    </tr>    
+                </tbody>
+            </table>
+        </footer>
+    </div>
+</body>
+
+</html> 

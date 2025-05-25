@@ -1,0 +1,59 @@
+{% extends "internal_app/base.html" %}
+
+{% block title %}{{ 'Edit Device' if device_view and device_view.mac_address_db else 'Add New Device' }}{% endblock %}
+
+{% block content %}
+    {# Add the narrower container specifically for the forms #}
+    <div class="container-narrow">
+        <h1>{{ 'Edit Device' if device_view and device_view.mac_address_db else 'Add New Device' }}</h1>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    {% if category == 'danger' %}
+                        <div class="alert alert-danger">{{ message }}</div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="content-block">
+            <form method="POST" action="{{ form_action_url }}">
+                <div class="form-group">
+                    <label for="mac_address">MAC Address</label>
+                    {# When editing, display the consistently formatted MAC address. When adding or on error, display the user's original input. #}
+                    <input type="text" id="mac_address" name="mac_address"
+                           value="{{ device_view.formatted_mac if device_view and device_view.mac_address_db else (device_view.mac_address_display if device_view else '') }}"
+                           {{ 'readonly' if device_view and device_view.mac_address_db else '' }}
+                           required
+                           {# Updated pattern to strictly enforce XX:XX:XX:XX:XX:XX format #}
+                           pattern="^([0-9A-Fa-f]{2}:){5}([0-9A-Fa-f]{2})$"
+                           title="Enter a valid MAC address (e.g., 00:1A:2B:3C:4D:5E)">
+                    {% if device_view and device_view.mac_address_db %}
+                        <small>MAC address cannot be changed after creation.</small>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    <label for="vlan_name">VLAN Name</label>
+                    <select id="vlan_name" name="vlan_name" class="form-control" required>
+                        <option value="" disabled {{ 'selected' if not device_view or not device_view.vlan_name else '' }}>Select VLAN</option>
+                        {% for vlan in valid_vlan_names %}
+                        <option value="{{ vlan }}" {{ 'selected' if device_view and device_view.vlan_name == vlan else '' }}>
+                            {{ vlan|capitalize }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description (Optional)</label>
+                    <textarea id="description" name="description">{{ device_view.description if device_view and device_view.description else '' }}</textarea>
+                </div>
+
+                <button type="submit" class="btn-submit">{{ 'Save Changes' if device_view and device_view.mac_address_db else 'Add Device' }}</button>
+                <a href="{{ url_for('internal_bp.devices_list') }}" class="btn-cancel">Cancel</a>
+            </form>
+        </div>
+    </div>
+{% endblock %}

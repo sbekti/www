@@ -1,0 +1,24 @@
+{% extends "public_base.html" %}
+
+{% block title %}Samudra Bekti{% endblock %}
+
+{% block content %}
+<article>
+    <header>
+        <h1>Hello!</h1>
+    </header>
+    <p>I am Sammy, a Software Engineer slash Site Reliability Engineer.</p>
+    <p>
+        <img src="{{ url_for('static', filename='assets/images/profile.jpg') }}" alt="Samudra Bekti" width="200" align="top" border="0">
+    </p>
+    <p>You can reach me via:</p>
+    <ul>
+        <li>Email: <a href="mailto:sbekti-on-bekti.com">sbekti-on-bekti.com</a></li>
+        <li>LinkedIn: <a href="https://www.linkedin.com/in/sbekti/">sbekti</a></li>
+        <li>Keybase: <a href="https://keybase.io/sbekti">sbekti</a></li>
+        <li>GitHub: <a href="https://github.com/sbekti">sbekti</a></li>
+        <li>Twitter: <a href="https://twitter.com/shbekti">shbekti</a></li>
+        <li>Instagram: <a href="https://instagram.com/shbekti">shbekti</a></li>
+    </ul>
+</article>
+{% endblock %}
