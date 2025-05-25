@@ -13,8 +13,8 @@
 <body>
     {# Navigation Bar #}
     <nav class="navbar">
-        <a href="{{ url_for('internal_bp.landing_page') }}">Intern Home</a>
-        <a href="{{ url_for('internal_bp.devices_list') }}">Manage Devices</a>
+        <a href="{{ url_for('.landing_page') }}">Intern Home</a>
+        <a href="{{ url_for('.devices_list') }}">Manage Devices</a>
         {# Add more internal navigation links here #}
         <a href="{{ url_for('public_index') }}" style="float: right;">Public Site</a>
     </nav>
@@ -30,4 +30,4 @@
         {# You might add build date or other info here if desired #}
     </footer>
 </body>
-</html> 
+</html>

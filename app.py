@@ -4,7 +4,8 @@ import os
 import logging
 from flask_sqlalchemy import SQLAlchemy # Added
 from internal_app.models import db # Added
-from internal_app import internal_bp # Added
+# Changed: from internal_app import internal_bp
+from internal_app import internal_subdomain_bp, internal_path_bp # Added
 
 import urllib.parse # For safely quoting password/username if constructing URI
 
@@ -45,8 +46,29 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'dev_secret_key_for_flas
 # Initialize extensions
 db.init_app(app)
 
+# --- SERVER_NAME Configuration (Crucial for Subdomain Routing) ---
+# This should be set based on your environment.
+# For production, it's your main domain (e.g., 'bekti.com').
+# For development, it's often 'localhost:port' or 'lvh.me:port' for testing subdomains.
+if app.config['ENV'] == 'production':
+    app.config['SERVER_NAME'] = os.environ.get('FLASK_SERVER_NAME', 'bekti.com')
+else: # 'development' or other non-production
+    # Default to localhost and the port Flask runs on.
+    # For testing subdomains like 'intern.corp.localhost:5000',
+    # ensure '127.0.0.1 intern.corp.localhost' is in your /etc/hosts file.
+    flask_run_port = os.environ.get('FLASK_RUN_PORT', '5000')
+    app.config['SERVER_NAME'] = os.environ.get('FLASK_SERVER_NAME', f'localhost:{flask_run_port}')
+# --- End SERVER_NAME Configuration ---
+
+
 # Register Blueprints
-app.register_blueprint(internal_bp)
+# Register the subdomain blueprint for intern.corp.bekti.com
+# It will handle requests to http(s)://intern.corp.yourdomain.com/
+app.register_blueprint(internal_subdomain_bp, subdomain='intern.corp')
+
+# Conditionally register the path-based blueprint for development (e.g., /intern)
+if app.config['ENV'] == 'development':
+    app.register_blueprint(internal_path_bp) # This blueprint has url_prefix='/intern' defined
 
 # Context Processors
 @app.context_processor

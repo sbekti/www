@@ -52,7 +52,7 @@
                 </div>
 
                 <button type="submit" class="btn-submit">{{ 'Save Changes' if device_view and device_view.mac_address_db else 'Add Device' }}</button>
-                <a href="{{ url_for('internal_bp.devices_list') }}" class="btn-cancel">Cancel</a>
+                <a href="{{ url_for('.devices_list') }}" class="btn-cancel">Cancel</a>
             </form>
         </div>
     </div>
