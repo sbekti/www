@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Edit Device</title>
+</head>
+
+<body>
+    <nav>
+        <a href="/">← Back to Home</a> | <a href="/devices">← Back to Device List</a>
+    </nav>
+
+    <h1>Edit Device</h1>
+    <form action="/devices/edit/{{.MAC}}" method="POST">
+        <div>
+            <label for="mac">MAC Address:</label>
+            <input type="text" id="mac" value="{{.MAC}}" disabled>
+        </div>
+        <div>
+            <label for="description">Description:</label>
+            <input type="text" id="description" name="description" value="{{.Description}}" required>
+        </div>
+        <div>
+            <label for="vlan">VLAN:</label>
+            <select id="vlan" name="vlan" required>
+                <option value="trusted" {{if eq .VLAN "trusted" }}selected{{end}}>Trusted</option>
+                <option value="iot" {{if eq .VLAN "iot" }}selected{{end}}>IoT</option>
+                <option value="guest" {{if eq .VLAN "guest" }}selected{{end}}>Guest</option>
+            </select>
+        </div>
+        <div>
+            <input type="submit" value="Update Device">
+            <a href="/devices">Cancel</a>
+        </div>
+    </form>
+</body>
+
+</html>

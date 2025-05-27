@@ -9,8 +9,41 @@
 </head>
 
 <body>
-    <h1>[Intern] Hello, {{ .Name }}!</h1>
-    <p>This is a template rendered by a Go Echo application.</p>
+    <h1>[Intern] Hello, {{ .AuthInfo.Name }}!</h1>
+
+    <h2>User Information</h3>
+        <table border="1">
+            <tr>
+                <td><strong>Username:</strong></td>
+                <td>{{ .AuthInfo.Username }}</td>
+            </tr>
+            <tr>
+                <td><strong>Full Name:</strong></td>
+                <td>{{ .AuthInfo.Name }}</td>
+            </tr>
+            <tr>
+                <td><strong>Email:</strong></td>
+                <td>{{ .AuthInfo.Email }}</td>
+            </tr>
+            <tr>
+                <td><strong>Groups:</strong></td>
+                <td>
+                    {{range $index, $group := .AuthInfo.Groups}}
+                    {{if $index}}, {{end}}{{ $group }}
+                    {{end}}
+                </td>
+            </tr>
+        </table>
+
+        <h2>Available Tools</h2>
+        <nav>
+            <ul>
+                <li><a href="/devices">Device Management</a> - Manage network devices and VLAN assignments</li>
+            </ul>
+        </nav>
+
+        <hr>
+        <p><em>More tools will be added here as they become available.</em></p>
 </body>
 
 </html>

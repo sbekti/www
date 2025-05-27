@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Add Device</title>
+</head>
+
+<body>
+    <nav>
+        <a href="/">← Back to Home</a> | <a href="/devices">← Back to Device List</a>
+    </nav>
+
+    <h1>Add New Device</h1>
+    <form action="/devices/add" method="POST">
+        <div>
+            <label for="mac">MAC Address:</label>
+            <input type="text" id="mac" name="mac" required pattern="[0-9a-f]{12}" title="12 hexadecimal characters">
+        </div>
+        <div>
+            <label for="description">Description:</label>
+            <input type="text" id="description" name="description" required>
+        </div>
+        <div>
+            <label for="vlan">VLAN:</label>
+            <select id="vlan" name="vlan" required>
+                <option value="trusted">Trusted</option>
+                <option value="iot">IoT</option>
+                <option value="guest">Guest</option>
+            </select>
+        </div>
+        <div>
+            <input type="submit" value="Add Device">
+            <a href="/devices">Cancel</a>
+        </div>
+    </form>
+</body>
+
+</html>

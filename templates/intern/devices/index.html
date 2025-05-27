@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Device Management</title>
+</head>
+
+<body>
+    <nav>
+        <a href="/">← Back to Home</a>
+    </nav>
+
+    <h1>Device Management</h1>
+    <p><a href="/devices/add">Add New Device</a></p>
+
+    <table border="1">
+        <tr>
+            <th>MAC Address</th>
+            <th>Description</th>
+            <th>VLAN</th>
+            <th>Actions</th>
+        </tr>
+        {{range .}}
+        <tr>
+            <td>{{.MAC}}</td>
+            <td>{{.Description}}</td>
+            <td>{{.VLAN}}</td>
+            <td>
+                <a href="/devices/edit/{{.MAC}}">Edit</a>
+                <form action="/devices/delete/{{.MAC}}" method="POST" style="display: inline;">
+                    <input type="submit" value="Delete"
+                        onclick="return confirm('Are you sure you want to delete this device?')">
+                </form>
+            </td>
+        </tr>
+        {{end}}
+    </table>
+</body>
+
+</html>
