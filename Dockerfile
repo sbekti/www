@@ -26,6 +26,10 @@ WORKDIR /root/
 # Copy the Pre-built binary file from the previous stage
 COPY --from=builder /app/main .
 
+# Copy the model.conf and policy.csv files
+COPY --from=builder /app/model.conf .
+COPY --from=builder /app/policy.csv .
+
 # Expose port 3000 to the outside world
 EXPOSE 3000
 
