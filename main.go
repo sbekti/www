@@ -5,6 +5,8 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
+	"strings"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -13,6 +15,13 @@ import (
 	"github.com/casbin/casbin/v2"
 	"github.com/sbekti/www/handlers"
 	"github.com/sbekti/www/util"
+)
+
+// Server configuration defaults
+const (
+	DefaultBindAddr   = "0.0.0.0"
+	DefaultBindPort   = "3000"
+	DefaultInternHost = "intern.corp.bekti.com"
 )
 
 type (
@@ -105,18 +114,40 @@ func setupPublicApp() *echo.Echo {
 }
 
 func main() {
-	// Initialize database connection
-	if err := util.InitDB(); err != nil {
-		log.Fatalf("Failed to initialize database: %v", err)
+	// Initialize all database connections
+	if err := util.InitAllDatabases(); err != nil {
+		log.Fatalf("Failed to initialize databases: %v", err)
 	}
-	defer util.CloseDB()
+	defer util.CloseAllDatabases()
+
+	// Get server configuration from environment
+	bindAddr := os.Getenv("BIND_ADDR")
+	bindPort := os.Getenv("BIND_PORT")
+	internHost := os.Getenv("INTERN_HOST")
+
+	// Set defaults if not provided
+	if bindAddr == "" {
+		bindAddr = DefaultBindAddr
+	}
+	if bindPort == "" {
+		bindPort = DefaultBindPort
+	}
+	if internHost == "" {
+		internHost = DefaultInternHost
+	}
 
 	// Hosts
 	hosts := map[string]*Host{}
 
-	// Intern
-	hosts["intern.corp.bekti.com"] = &Host{setupInternApp()}
-	hosts["intern-dev.corp.bekti.com"] = &Host{setupInternApp()}
+	// Parse intern hosts (support comma-separated list)
+	internHosts := strings.Split(internHost, ",")
+	for _, host := range internHosts {
+		host = strings.TrimSpace(host)
+		if host != "" {
+			hosts[host] = &Host{setupInternApp()}
+			log.Printf("Registered intern host: %s", host)
+		}
+	}
 
 	// Server
 	e := echo.New()
@@ -140,7 +171,10 @@ func main() {
 		return
 	})
 
+	// Construct bind address
+	bindAddress := bindAddr + ":" + bindPort
+
 	// Start server - Echo's e.Logger.Fatal already handles this well.
-	log.Printf("Starting server on :3000")
-	e.Logger.Fatal(e.Start(":3000"))
+	log.Printf("Starting server on %s", bindAddress)
+	e.Logger.Fatal(e.Start(bindAddress))
 }

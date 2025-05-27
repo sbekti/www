@@ -19,7 +19,7 @@ func NewDeviceHandler() *DeviceHandler {
 
 // ListDevices handles GET /devices
 func (h *DeviceHandler) ListDevices(c echo.Context) error {
-	db := util.GetDB()
+	db := util.GetDatabase(util.RadiusDBName)
 	
 	rows, err := db.Query(c.Request().Context(), `
 		SELECT u.username, u.description, r.groupname
@@ -69,7 +69,7 @@ func (h *DeviceHandler) AddDevice(c echo.Context) error {
 		return c.String(http.StatusBadRequest, "Invalid device data")
 	}
 
-	db := util.GetDB()
+	db := util.GetDatabase(util.RadiusDBName)
 	ctx := c.Request().Context()
 
 	// Start transaction
@@ -123,7 +123,7 @@ func (h *DeviceHandler) AddDevice(c echo.Context) error {
 // ShowEditForm handles GET /devices/edit/:mac
 func (h *DeviceHandler) ShowEditForm(c echo.Context) error {
 	mac := c.Param("mac")
-	db := util.GetDB()
+	db := util.GetDatabase(util.RadiusDBName)
 
 	var device models.Device
 	err := db.QueryRow(c.Request().Context(), `
@@ -155,7 +155,7 @@ func (h *DeviceHandler) UpdateDevice(c echo.Context) error {
 		return c.String(http.StatusBadRequest, "Invalid VLAN")
 	}
 
-	db := util.GetDB()
+	db := util.GetDatabase(util.RadiusDBName)
 	ctx := c.Request().Context()
 
 	// Start transaction
@@ -202,7 +202,7 @@ func (h *DeviceHandler) UpdateDevice(c echo.Context) error {
 func (h *DeviceHandler) DeleteDevice(c echo.Context) error {
 	authInfo := util.GetAuthInfo(c)
 	mac := c.Param("mac")
-	db := util.GetDB()
+	db := util.GetDatabase(util.RadiusDBName)
 	ctx := c.Request().Context()
 
 	// Start transaction
