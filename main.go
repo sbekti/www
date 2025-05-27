@@ -89,9 +89,6 @@ func main() {
 	// Intern
 	hosts["intern.corp.bekti.com"] = &Host{setupInternApp()}
 
-	// Public
-	hosts["bekti.com"] = &Host{setupPublicApp()}
-
 	// Server
 	e := echo.New()
 
@@ -103,13 +100,11 @@ func main() {
 		req := c.Request()
 		res := c.Response()
 		host := hosts[req.Host]
-
 		if host == nil {
-			err = echo.ErrNotFound
-		} else {
-			host.Echo.ServeHTTP(res, req)
+			host = &Host{setupPublicApp()}
 		}
 
+		host.Echo.ServeHTTP(res, req)
 		return
 	})
 
