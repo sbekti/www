@@ -1,58 +1,32 @@
-# Ignore Python-specific files and directories
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
-env/
-venv/
-.venv/
-build/
-dist/
-*.egg-info/
-.tox/
-.mypy_cache/
-.pytest_cache/
-.ipynb_checkpoints/
+# If you prefer the allow list template instead of the deny list, see community template:
+# https://github.com/github/gitignore/blob/main/community/Golang/Go.AllowList.gitignore
+#
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
 
-# Logs
-logs
-*.log
+# Test binary, built with `go test -c`
+*.test
 
-# Dependency directories
-node_modules/ # Keep if there might be frontend dependencies later
+# Code coverage profiles and other test artifacts
+*.out
+coverage.*
+*.coverprofile
+profile.cov
 
-# dotenv environment variables file
+# Dependency directories (remove the comment below to include it)
+# vendor/
+
+# Go workspace file
+go.work
+go.work.sum
+
+# env file
 .env
-.env.test
 
-# Development scripts with sensitive information
-run_dev.sh
-
-# IDE-specific files
+# Editor/IDE
+.idea/
 .vscode/
-
-# OS generated files
-.DS_Store
-.localized
-
-# Thumbnails
-._*
-
-# Package files
-*.tgz
-*.whl
-
-# Coverage reports
-htmlcov/
-.coverage
-.coverage.*
-
-# Database files
-*.sqlite3
-*.db
-
-# Uploaded files
-uploads/
-
-# Add other ignores as needed based on project specifics

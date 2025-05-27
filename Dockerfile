@@ -1,40 +1,33 @@
-# Use a Python base image
-FROM python:3.9-alpine
+# Start from the official Golang image to build the binary
+FROM golang:1.24.3-alpine AS builder
 
-# Build arguments with defaults
-ARG GUNICORN_WORKERS=4
-ARG BUILD_DATE
-
-# Set environment variables
-ENV GUNICORN_WORKERS=$GUNICORN_WORKERS
-
-# Set build date environment variable
-# If BUILD_DATE is not provided during build, it will be empty and app will use current time
-ENV APP_BUILD_DATE=$BUILD_DATE
-
-# Set the working directory in the container
+# Set the Current Working Directory inside the container
 WORKDIR /app
 
-# Create a non-root user and group
-RUN addgroup -S appgroup && adduser -S -G appgroup appuser
+# Copy go mod and sum files
+COPY go.mod go.sum ./
 
-# Copy the requirements file first to leverage Docker cache
-COPY requirements.txt /app/
+# Download all dependencies. Dependencies will be cached if the go.mod and go.sum files are not changed
+RUN go mod download
 
-# Install the required Python packages
-RUN pip install --no-cache-dir -r requirements.txt
+# Copy the source code into the container
+COPY . .
 
-# Copy the rest of the application files
-COPY . /app
+# Build the Go app
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o main .
 
-# Change ownership of the app directory to the new user
-RUN chown -R appuser:appgroup /app
+# Start a new stage from scratch for a lightweight image
+FROM alpine:3.21.3
 
-# Switch to the non-root user
-USER appuser
+RUN apk update && apk --no-cache add ca-certificates
 
-# Expose the port that Gunicorn will listen on
-EXPOSE 8000
+WORKDIR /root/
 
-# Command to run the Flask application using Gunicorn
-CMD ["sh", "-c", "gunicorn -w $GUNICORN_WORKERS -b 0.0.0.0:8000 app:app"]
+# Copy the Pre-built binary file from the previous stage
+COPY --from=builder /app/main .
+
+# Expose port 3000 to the outside world
+EXPOSE 3000
+
+# Command to run the executable
+CMD ["./main"] 
