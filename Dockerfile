@@ -31,7 +31,7 @@ COPY --from=builder /app/model.conf .
 COPY --from=builder /app/policy.csv .
 
 # Copy the template directory to the same directory as the Go app
-COPY --from=builder /app/template .
+COPY --from=builder /app/templates .
 
 # Expose port 3000 to the outside world
 EXPOSE 3000
